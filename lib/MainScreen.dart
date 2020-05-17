@@ -53,7 +53,10 @@ class _MainScreenState extends State<MainScreen> {
             backgroundColor: dark,
             
             
-            body: drinks != null ? ListView.builder(
+            body: drinks != null ? 
+            drinks == "No Data" ? 
+            Center(child: Text("No Data",style: TextStyle(color: whiteText),)) : 
+            ListView.builder(
             itemCount: drinks.length,
             itemBuilder: (context, index){
             return Padding(

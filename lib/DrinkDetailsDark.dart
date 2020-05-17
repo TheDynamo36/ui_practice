@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:ui_practice/IngredientsDetails.dart';
 import 'CustomColors.dart';
 
 
@@ -13,8 +15,8 @@ class DrinkDetailsDark extends StatefulWidget {
 
 class _DrinkDetailsDarkState extends State<DrinkDetailsDark> {
 var drinkDetails;
-var ingredientsList = new List<String>();
-var measurementList = new List<String>();
+var ingredientsList = [];
+var measurementList = [];
 
 Color ourBlack = Color(0xFF121619);
 
@@ -23,6 +25,7 @@ Color ourBlack = Color(0xFF121619);
  void initState(){
    super.initState();
    updateUI(widget.response);
+   
  }
 
  void updateUI(var response){
@@ -44,7 +47,7 @@ Color ourBlack = Color(0xFF121619);
  
   @override
   Widget build(BuildContext context) {
-    
+    var height = MediaQuery.of(context).size.height;
     return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
@@ -117,7 +120,7 @@ Color ourBlack = Color(0xFF121619);
                   child: Column(
                     children: <Widget>[
                       RowText(text: "${drinkDetails.category}", imgName: "category"),
-                      RowText(text: "${drinkDetails.tags ?? "Classic"}", imgName: "comment",),
+                      RowText(text: "${drinkDetails.tags ?? "No Comments"}", imgName: "comment",),
                       RowText(text: "${drinkDetails.glass.toString().length < 4 ? "-" : drinkDetails.glass}", imgName: "glass"),
                     ],
                   ),
@@ -127,40 +130,91 @@ Color ourBlack = Color(0xFF121619);
                 //Ingredients
 
                 TextWithLine(text: "Ingredients"),
-                SizedBox(height:24.0),
-                for(int i = 0 ; i < measurementList.length ; i++)
-                 new Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0,0.0,20.0,8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                              "${measurementList[i]}            ",
-                              style: TextStyle(
-                                color: whiteText,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
+                SizedBox(height:10.0),
+
+                Container(
+                  width: double.maxFinite,
+                  height: height > 680 ? 165 : (height*24.5/100),
+                  child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: ingredientsList.length,
+                  itemBuilder: (context,index){
+                  return Container(
+
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black87,
+                          blurRadius: 5)],
+                      borderRadius: BorderRadius.circular(10),
+                      color: light,),
+                    
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(4),
+                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Image.network(
+                                   "https://www.thecocktaildb.com/images/ingredients/${ingredientsList[index].trim()}-Medium.png",
+                        width: (height*15/100),
+                        fit: BoxFit.fill,),
+                      Expanded(
+                      child: Text(
+                        "${measurementList[index]}",
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 12, color: whiteText),),
                         ),
                         
                         Expanded(
-                          flex: 3,
-                            child: Text(
-                            ingredientsList[i],
-                            style: TextStyle(
-                              color: whiteText,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                      child: Text(
+                        "${ingredientsList[index]}",
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 12, color: whiteText, fontWeight: FontWeight.bold),),
+                        ),
+                      ],),
+                  );
+                    }),
+                ),
+
+                // for(int i = 0 ; i < measurementList.length ; i++)
+                //  new Padding(
+                //     padding: const EdgeInsets.fromLTRB(16.0,0.0,20.0,8.0),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       children: <Widget>[
+                //         Expanded(
+                //           flex: 2,
+                //           child: Text(
+                //               "${measurementList[i]}            ",
+                //               style: TextStyle(
+                //                 color: whiteText,
+                //                 fontSize: 14.0,
+                //                 fontWeight: FontWeight.w400,
+                //               ),
+                //             ),
+                //         ),
+                        
+                //         Expanded(
+                //           flex: 3,
+                //             child: Text(
+                //             ingredientsList[i],
+                //             style: TextStyle(
+                //               color: whiteText,
+                //               fontSize: 14.0,
+                //               fontWeight: FontWeight.w700,
+                //             ),
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //   ),
                 
+
+                SizedBox(height:10.0),
+
+
 
                 //Instructions
 
@@ -184,6 +238,10 @@ Color ourBlack = Color(0xFF121619);
         ),
     );
   }
+
+  gotoIngredientDetails(String ingredient){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => IngredientsDetails(name: ingredient,imageURL: "https://www.thecocktaildb.com/images/ingredients/${ingredient.trim()}-Medium.png")));
+    }
 }
 
 

@@ -2,13 +2,11 @@
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
 import 'package:ui_practice/CustomColors.dart';
-//import 'package:ui_practice/DrinkDetail.dart';
-import 'DrinkDetailsDark.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:ui_practice/MainScreen.dart';
 
 class IngredientsDetails extends StatefulWidget {
-final name, prefix, imageURL;
-const IngredientsDetails({Key key, @required this.name,  @required this.prefix,  @required this.imageURL}) : super(key : key);
+final name, imageURL;
+const IngredientsDetails({Key key, @required this.name,  @required this.imageURL}) : super(key : key);
   @override
   _IngredientsDetailsState createState() => _IngredientsDetailsState();
 }
@@ -53,6 +51,7 @@ class _IngredientsDetailsState extends State<IngredientsDetails> {
                   alignment: AlignmentDirectional.topEnd,
                   children: <Widget> [
                     Container(
+                      width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(4.0),
                       color: Color(0xFFDDE7F0),
                       child: Hero(
@@ -60,19 +59,27 @@ class _IngredientsDetailsState extends State<IngredientsDetails> {
                       child: Image(image: NetworkImage(widget.imageURL)),),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 20.0),
-                      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.grey[600], blurRadius: 10.0,)]),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(12.0),
-                        onPressed: (){},
-                        color: Color(0xFF43576b),
-                        child: Text("View Drinks",style: TextStyle(color: lightBackground),),
+                      margin: EdgeInsets.fromLTRB(0.0,10.0,8.0,0.0 ),
+                      
+                      //decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.grey[600], blurRadius: 10.0,)]),
+                      child: FloatingActionButton(
+                        elevation: 8,
+                        //padding: EdgeInsets.all(12.0),
+                        onPressed: (){
+                          Navigator.push(context,MaterialPageRoute(fullscreenDialog: true,
+                          builder: (context) => MainScreen(category: widget.name, prefix: 'i',)));
+                        },
+                        backgroundColor: Color(0xFF43576b),
+                        child: Icon(Icons.play_arrow,size: 30,),//Text("View Drinks",style: TextStyle(color: lightBackground),),
                       ),
                     )
                 ]
               ),
               
-              ingredient == null ? Center(child: CircularProgressIndicator(backgroundColor: light)) :
+              ingredient == null ? Center(child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: CircularProgressIndicator(backgroundColor: light),
+              )) :
                   Column(children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(24.0),

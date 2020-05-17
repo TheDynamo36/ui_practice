@@ -10,6 +10,9 @@ class NetworkHelper{
     try {
       http.Response response = await http.get(url);
       if(response.statusCode == 200){
+        print(response.body);
+        if(response.body.isEmpty)
+        return "No Data";
         return jsonDecode(response.body)['drinks'];
       }else{print(response.statusCode);}
     }catch(e){print(e);}
