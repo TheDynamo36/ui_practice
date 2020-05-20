@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ui_practice/networking.dart';
 Color light = Color(0xFF2D3446);
-Color dark = Color(0xFF202738);
-Color lightBackground = Color(0xFFF2F3F4);
+// Color dark = Color(0xFF202738);
+Color dark = Color(0xFFF9F9F9);
+// Color lightBackground = Color(0xFFF9F9F9);
+Color lightBackground = Color(0xFFefecea);
 Color whiteText = Color(0xFFF9F8F7);
+Color blackText = Color(0xFF1D1B1B);
 Color g4 = Color(0xFF4A5064);
 Color g3 = Color(0xFF464B5F);
 Color g2 = Color(0xFF33394B);
@@ -18,7 +21,7 @@ Future<dynamic> getByCategory(String category, String prefix) async{
 Future<dynamic> getIngredientDetails(String name) async{
   NetworkHelper networkHelper = NetworkHelper("https://www.thecocktaildb.com/api/json/v1/1/search.php?i=$name");
   var response = await networkHelper.getIngredientData();
-  return response[0];
+  return response != null ? response[0] : "No Data";
 }
 
 
@@ -71,10 +74,13 @@ class RowText extends StatelessWidget {
     return Row(
       children: <Widget>[
         Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [new BoxShadow(color: Colors.black12, blurRadius: 6.0)]),
           child: Image(image: AssetImage('assets/$imgName.png'),
           ),
-          width: 25.0,
-          height: 25.0,
+          width: 28.0,
+          height: 28.0,
           margin: EdgeInsets.only(right: 10.0),
           ),
         Padding(
@@ -83,7 +89,7 @@ class RowText extends StatelessWidget {
             text,
             style: TextStyle(
               fontFamily: "Playfair",
-              color: whiteText,
+              color: blackText,
               fontSize: 14,
               fontWeight: FontWeight.w500),),
         ),
@@ -160,7 +166,7 @@ class TextWithLine extends StatelessWidget {
       children: <Widget>[
         Text(text,style: TextStyle(
           color: color ?? whiteText,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           fontSize: fontSize ?? 20.0,
           fontFamily: fontFamily ?? "Montserrat",
           ),
@@ -177,6 +183,75 @@ class TextWithLine extends StatelessWidget {
   }
 }
 
+class TopBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      child: Container(
+        height: 300.0,
+      ),
+      painter: CurvePainter(),
+    );
+  }
+}
+
+class CurvePainter extends CustomPainter{
+  @override
+  void paint(Canvas canvas, Size size) {
+  Path path = Path();
+  Paint paint = Paint();
+
+  path.lineTo(0, size.height*1.3);
+  path.quadraticBezierTo(size.width*0.5, size.height*0.60, size.width, size.height*1);
+  path.lineTo(size.width, 0);
+  path.close();
+
+  paint.color = Color(0xFF5f6b89);
+  canvas.drawPath(path, paint);
+  
+  path = Path();
+
+  path.lineTo(0, size.height*0.5);
+  path.quadraticBezierTo(size.width*0.5, size.height*0.30, size.width, size.height*1);
+  path.lineTo(size.width, 0);
+  path.close();
+
+ 
+  paint.color = Color(0xFF414a60);
+  canvas.drawPath(path, paint);
+
+  // path = Path();
+
+  // path.lineTo(0, size.height*0.5);
+  // path.quadraticBezierTo(size.width*0.5, size.height*0.15, size.width, size.height*0.2);
+  // path.lineTo(size.width, 0);
+  // path.close();
+
+ 
+  // paint.color = Color(0xFF313849);
+  // canvas.drawPath(path, paint);
+
+
+  // path = Path();
+  // path.lineTo(0, size.height*0.2);
+  // path.quadraticBezierTo(size.width*0.10, size.height*0.15, size.width*0.22, size.height*0.2);
+  // path.quadraticBezierTo(size.width*0.30, size.height*0.25, size.width*0.40, size.height*0.20);
+  // path.quadraticBezierTo(size.width*0.52, size.height*0.13, size.width*0.65, size.height*0.12);
+  // path.quadraticBezierTo(size.width*0.75, size.height*0.12, size.width, size.height*0.2);
+  // path.lineTo(size.width, 0);
+  // path.close();
+
+  // paint.color = light;//Color(0xFFDDE7F0);
+  // canvas.drawPath(path, paint);
+
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return oldDelegate != this;
+  }
+
+}
 const List<String> all_ingredients = [
   'Vodka',  'Gin', 'Rum', 'Tequila', 'Scotch', 'Absolut Kurant',' Absolut Peppar',' Absolut Vodka',' Advocaat',' Aejo Rum',
   'Aftershock','Agave Syrup', 'Ale', 'Allspice', 'Almond Extract', 'Almond Flavoring', 

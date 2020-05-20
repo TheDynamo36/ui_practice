@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ui_practice/AllIngredients.dart';
+import 'package:ui_practice/Bookmarks.dart';
 import 'package:ui_practice/CustomColors.dart';
 import 'package:ui_practice/IngredientsDetails.dart';
 import 'MainScreen.dart';
@@ -25,7 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.initState();
     fetchData();
     fetchCategories();
-    fetchIngredients();
+    //fetchIngredients();
   }
 
   @override
@@ -33,15 +33,26 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     var height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          leading: Image(
-          image: AssetImage("assets/ic_launcher.png"),
-                    ), 
-          title: Text("MADIRA", style: TextStyle(fontFamily: "Playfair", fontWeight: FontWeight.bold, letterSpacing: 2.0),),
-          backgroundColor: Colors.transparent,
-          elevation: 2.0,
+        appBar: AppBar( 
+          title: Text("Madira App", style: TextStyle(fontWeight: FontWeight.w600, color: whiteText),),
+          actions: <Widget>[
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon:Icon(Icons.search),
+                  onPressed: () => openIngredientPage(),),
+               IconButton(icon: Icon(Icons.favorite), onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> Bookmarks()));},),
+                IconButton(icon: Icon(Icons.refresh), onPressed: (){
+                  setState((){drinks = null;});
+                  fetchData();
+                  
+                })
+              ],
+            ),
+          ],
+          backgroundColor: light,
           ),
-        backgroundColor: dark,
+        backgroundColor: lightBackground,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -54,7 +65,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   child: Text(
                     'Recommended',
                     style: TextStyle(
-                      color: whiteText,
+                      color: blackText,
                       fontSize: 18,
                       fontWeight: FontWeight.w500
                     ),),
@@ -62,85 +73,160 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                 //Recommended Drinks
 
-                drinks == null || (_load && key == 1) ?  Padding(child: CircularProgressIndicator(), padding: EdgeInsets.all(35.0),) 
-                : TopButtons(text: drinks['strDrink'],url: "${drinks['strDrinkThumb']}/preview", myFunction: () => setState((){
-                                     key = 1;
-                                     _load = true;
-                                    customfunction();
-                }),),
+                drinks == null || (_load && key == 1) ?  Padding(child: Center(child: CircularProgressIndicator(backgroundColor: blackText,)), padding: EdgeInsets.all(40.0),) 
+                // : TopButtons(text: drinks['strDrink'],url: "${drinks['strDrinkThumb']}/preview", myFunction: () => setState((){
+                //                      key = 1;
+                //                      _load = true;
+                //                     customfunction();
+                // }),),
                 
-                
+                : InkWell(
+                  onTap: () => setState((){
+                    key = 1;
+                    _load = true;
+                    openRandomDrink();}),
+                    child: Container(
+                      margin: EdgeInsets.only(top:8.0),
+                    padding: EdgeInsets.all(0.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.white,
+                      boxShadow: [new BoxShadow(color: Colors.black45, blurRadius: 8.0)]),
+                    height: 150.0,
+                    child: Row(children: <Widget>[
+                      SizedBox(
+                          width: 149.0,
+                          child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          child: Image.network("${drinks['strDrinkThumb']}/preview"
+                          ),
+                        ),
+                      ),
+
+                      Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                            AutoSizeText(
+                              drinks['strDrink'],
+                              maxLines: 3,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),),
+
+                            Flexible(
+                                flex: 2,
+                                child: AutoSizeText(
+                                "${drinks['strCategory']} | ${drinks['strAlcoholic']}",
+                                minFontSize: 10,
+                                maxLines: 2,),
+                            ),
+                            SizedBox(height: height*0.02,),
+                            Text(
+                              "Ingredients",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.underline,
+                                ),
+                            ),
+                            SizedBox(height: height*0.005,),
+                            for(int i = 1 ; i <= 3 ; i++)
+                            Flexible(
+                                child: AutoSizeText(
+                                drinks['strIngredient$i'] != null ? "- ${drinks['strIngredient$i']}" : "", maxFontSize: 12, minFontSize: 10,),
+                            ),
+                            
+                        ],),
+                          ),
+                      ),
+
+                      Icon(Icons.navigate_next),
+                    ],),
+                  ),
+                ),
                 //Categories of Drinks
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: TextWithLine(text: "Categories"),
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: TextWithLine(text: "Categories", color: blackText, fontSize: 20.0,),
                 ),
 
                 
                 categories != null  ? Container(
                   width: MediaQuery.of(context).size.width,
                   // height: (height*38.7)/100,
-                  child: GridView.builder(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1.5, ),//MediaQuery.of(context).size.width /
-                      // (MediaQuery.of(context).size.height / 3.5),)  ,
+                    // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    //   crossAxisCount: 3,
+                    //   childAspectRatio: 1.5, ),//MediaQuery.of(context).size.width /
+                    //   // (MediaQuery.of(context).size.height / 3.5),)  ,
                     itemCount: categories.length,
                     itemBuilder: (context,index){
-                      return Container(
-                        height: 10.0,
-                        margin: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          boxShadow: [new BoxShadow(color: Colors.black26, blurRadius: 10.0)],
-                          color: light,
-                          borderRadius: BorderRadius.circular(10.0),  
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              child: AutoSizeText(
-                                categories[index]["strCategory"],
-                                softWrap: true,
-                                maxFontSize: 12,
-                                minFontSize: 10,
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                style: TextStyle(color: whiteText),),
-                              onTap: (){
-                                openList(categories[index]["strCategory"], "c", "");},),
+                      return InkWell(
+                        onTap: (){
+                            openList(categories[index]["strCategory"], "c", "");},
+                          child: Container(
+                          height: 50.0,
+                          margin: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            boxShadow: [new BoxShadow(color: Colors.black26, blurRadius: 5.0)],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),  
                           ),
-                        ),
-                        );
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                AutoSizeText(
+                                  categories[index]["strCategory"],
+                                  softWrap: true,
+                                  minFontSize: 10,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  style: TextStyle(color: blackText),),
+
+                                  Icon(Icons.navigate_next),
+                              ],
+                            ),
+                          ),
+                          ),
+                      );
                     }),
-                ) : Center(child: CircularProgressIndicator(),),
+                ) : Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Center(child: CircularProgressIndicator(backgroundColor: light,),),
+                ),
 
 
-                Container(height: 1, width: MediaQuery.of(context).size.width, color: whiteText, padding: EdgeInsets.all(8),),
+                // Container( margin: EdgeInsets.only(top: 8.0),height: 1, width: MediaQuery.of(context).size.width, color: blackText, padding: EdgeInsets.all(8),),
 
-                Container(
-                        margin: EdgeInsets.all(20.0),
-                        decoration: BoxDecoration(
-                          boxShadow: [new BoxShadow(color: Colors.black26, blurRadius: 10.0)],
-                          color: light,
-                          borderRadius: BorderRadius.circular(10.0),  
-                        ),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              child: AutoSizeText(
-                                "Search By Ingredients",
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                style: TextStyle(color: whiteText),),
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AllIngredients(), fullscreenDialog: true));},),
-                          ),
-                        ),
-                        ),
+                // Container(
+                //         margin: EdgeInsets.all(16.0),
+                //         decoration: BoxDecoration(
+                //           boxShadow: [new BoxShadow(color: Colors.black45, blurRadius: 8.0)],
+                //           color: light,
+                //           borderRadius: BorderRadius.circular(10.0),  
+                //         ),
+                //         child: Center(
+                //           child: Padding(
+                //             padding: const EdgeInsets.all(12.0),
+                //             child: InkWell(
+                //               child: AutoSizeText(
+                //                 "Search By Ingredients",
+                //                 textAlign: TextAlign.center,
+                //                 maxLines: 2,
+                //                 style: TextStyle(color: whiteText),),
+                //               onTap: (){
+                //                 openIngredientPage();},),
+                //           ),
+                //         ),
+                //         ),
                 // Ingredients List
                 //Categories of Drinks
                 // Padding(padding: EdgeInsets.only(top: 12.0),),
@@ -218,26 +304,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
     );
   }
-
+  openIngredientPage(){
+    Navigator.pushNamed(context, '/ingredientsPage');
+  }
   
   fetchData() async{
    drinks = await getByURL(randomCocktailURL);
-  //  print(drinks);
    setState(() {
    });
   }
 
   fetchCategories() async{
   categories = await getList("https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list");
-  setState(() {
-    print(categories);
-  });
+  setState(() {});
   }
 
-  fetchIngredients() async{
-    ingredients = await getList("https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list");
-  setState(() {  });
-  }
+  // fetchIngredients() async{
+  //   ingredients = await getList("https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list");
+  // setState(() {  });
+  // }
 
   openList(String data, String prefix, String imageURL){
    prefix != "i" ? Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen(category: data, prefix: prefix),fullscreenDialog: true))
@@ -245,12 +330,28 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
   
   
-  customfunction() async{
-    var data = await getDataUsingID(drinks['idDrink']);
+  // customfunction() async{
+  //   var data = await getDataUsingID(drinks['idDrink']);
+  //   final result = await Navigator.push(
+  //                     context,
+  //                   MaterialPageRoute(
+  //                     builder: (context) => DrinkDetailsDark(response: data),
+  //                       fullscreenDialog: true,
+  //            )
+  //     );
+  //   if(result == true || result == null){
+  //     setState(() {
+  //       _load = false;
+  //       key = 0;
+  //     });
+  //   }
+  // }
+  
+  openRandomDrink() async {
     final result = await Navigator.push(
                       context,
                     MaterialPageRoute(
-                      builder: (context) => DrinkDetailsDark(response: data),
+                      builder: (context) => DrinkDetailsDark(response: drinks),
                         fullscreenDialog: true,
              )
       );
@@ -260,10 +361,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         key = 0;
       });
     }
-  }
-  
-  loadAllIngredients() async{
-    
   }
 
 }

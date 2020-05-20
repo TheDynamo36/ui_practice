@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ui_practice/AllIngredients.dart';
 import 'WelcomeScreen.dart';
 import 'CustomColors.dart';
 import 'package:flutter/services.dart' ;
@@ -13,6 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Cocktail",
+      routes: {
+        
+        '/ingredientsPage' : (context) => AllIngredients(),
+      },
       theme: ThemeData(
         accentColor: Colors.white30,
         primaryColorDark: dark,

@@ -35,12 +35,12 @@ class _IngredientsDetailsState extends State<IngredientsDetails> {
                 icon: new Icon(Icons.arrow_back, color: dark,),
                 onPressed: (){Navigator.pop(context,true);}
              ),
-        backgroundColor: Color(0xFFDDE7F0),
+        backgroundColor: light,
         title: Text(widget.name, style: TextStyle(color: dark,),),
         elevation: 0,
         
         ),
-        backgroundColor: lightBackground,//dark,//lightBackground,
+        backgroundColor: whiteText,//dark,//lightBackground,
         
         
         body: SingleChildScrollView(
@@ -51,13 +51,16 @@ class _IngredientsDetailsState extends State<IngredientsDetails> {
                   alignment: AlignmentDirectional.topEnd,
                   children: <Widget> [
                     Container(
+                      child: TopBar(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top:12.0),
                       width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.all(4.0),
-                      color: Color(0xFFDDE7F0),
                       child: Hero(
                       tag: widget.name,
                       child: Image(image: NetworkImage(widget.imageURL)),),
                     ),
+                    if(ingredient!=null)
                     Container(
                       margin: EdgeInsets.fromLTRB(0.0,10.0,8.0,0.0 ),
                       
@@ -78,22 +81,29 @@ class _IngredientsDetailsState extends State<IngredientsDetails> {
               
               ingredient == null ? Center(child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: CircularProgressIndicator(backgroundColor: light),
-              )) :
-                  Column(children: <Widget>[
+                child: CircularProgressIndicator(backgroundColor: blackText),
+              )) : ingredient == "No Data" ? Center(child: Row(
+                children: <Widget>[
+                  Image.asset('assets/profiling.png',width: 50, height: 50),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("No Data", style: TextStyle(color: blackText, fontWeight: FontWeight.w600),),)
+                ],
+              ),)
+                 : Column(children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.all(24.0),
+                      padding: EdgeInsets.fromLTRB(24.0,40.0,24.0,48.0),
                       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                         DrinkHeader(top: ingredient["strType"], bottom:"Type"),
                         DrinkHeader(top: ingredient["strAlcohol"], bottom:"Alcoholic"),
-                        DrinkHeader(top: "${ingredient["strABV"] ?? "0"}%", bottom:"Strength"),
+                        DrinkHeader(top: "${ingredient["strABV"] ?? "-"}", bottom:"% Strength"),
                       ],
                       ),
                       ),
                       Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: TextWithLine(text: "Summary",color: dark,fontFamily: "Playfair",),
+                      child: TextWithLine(text: "Summary",color: blackText,),
                        ),
                       Padding(
                       padding: EdgeInsets.all(12.0),
@@ -102,9 +112,9 @@ class _IngredientsDetailsState extends State<IngredientsDetails> {
                         textAlign: TextAlign.justify, 
                         style: TextStyle(
                           fontSize: 16.0,
-                          color: dark,//whiteText, 
+                          color: Colors.grey[700],//whiteText, 
                           height: 1.5, 
-                          letterSpacing: 0.7,
+                          letterSpacing: 0.3,
                           ),),
                       ),
                       ],),
@@ -128,13 +138,14 @@ class DrinkHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment:  MainAxisAlignment.center,
       children: <Widget>[
       Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Text(top ?? "-",style: TextStyle(fontWeight: FontWeight.bold, color: dark),),
+        child: Text(top ?? "-",style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: blackText),),
       ),
-      Text(bottom),
+      Text(bottom, style: TextStyle(color: blackText),),
     ],);
   }
 }

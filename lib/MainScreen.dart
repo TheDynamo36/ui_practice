@@ -45,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
                     icon: new Icon(Icons.arrow_back),
                     onPressed: (){Navigator.pop(context,true);}
                  ),
-            backgroundColor: dark,
+            backgroundColor: light,
             title: Text(widget.category),
             elevation: 0,
             
@@ -55,55 +55,81 @@ class _MainScreenState extends State<MainScreen> {
             
             body: drinks != null ? 
             drinks == "No Data" ? 
-            Center(child: Text("No Data",style: TextStyle(color: whiteText),)) : 
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("assets/profiling.png"),
+                  SizedBox(height: 30,),
+                  Text("No Data",style: TextStyle(color: blackText, fontSize: 16.0, fontWeight: FontWeight.w600),),
+                ],
+              )) : 
             ListView.builder(
             itemCount: drinks.length,
             itemBuilder: (context, index){
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FlatButton(
-                  onPressed: (){
-                     
-                    print("Pressed");
-                    var data = drinks[index];
-                    showDetails(data["idDrink"], index);
-                  },
-                  child: Container(
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(color: light,
-                  boxShadow: [new BoxShadow(color: Colors.black26, blurRadius: 5.0)],
-                  borderRadius: BorderRadius.all(Radius.circular(10),),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Hero(
-                          tag: drinks[index]["idDrink"],
-                          child: ClipRRect(
-                          child: Image(image: NetworkImage("${drinks[index]["strDrinkThumb"]}/preview") ?? AssetImage("assets/noimg.jpg"),
-                          height: 130,
-                          width: 130,),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          "${drinks[index]["strDrink"]}",
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            ),
-                            ),
-                      ),
-                    ],
-                  ),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical:10.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [new BoxShadow(color: Colors.black54, blurRadius: 4.0)],
+                  borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
+                  title: Text("${drinks[index]["strDrink"]}",style: TextStyle(color: blackText, fontSize: 20.0)),
+                  leading: Image(image: NetworkImage("${drinks[index]["strDrinkThumb"]}/preview") ?? AssetImage("assets/noimg.jpg"),),
+                  trailing: Icon(Icons.navigate_next),
+                  onTap: (){
+                      var data = drinks[index];
+                      showDetails(data["idDrink"], index);
+                    },
                 ),
-              ),
+                // child: FlatButton(
+                //     onPressed: (){
+                       
+                //       print("Pressed");
+                //       var data = drinks[index];
+                //       showDetails(data["idDrink"], index);
+                //     },
+                //     child: Container(
+                //     padding: const EdgeInsets.all(12.0),
+                //     decoration: BoxDecoration(color: light,
+                //     boxShadow: [new BoxShadow(color: Colors.black26, blurRadius: 5.0)],
+                //     borderRadius: BorderRadius.all(Radius.circular(10),),
+                //     ),
+                //     child: Row(
+                //       children: <Widget>[
+                //         Hero(
+                //             tag: drinks[index]["idDrink"],
+                //             child: ClipRRect(
+                //             child: Image(image: NetworkImage("${drinks[index]["strDrinkThumb"]}/preview") ?? AssetImage("assets/noimg.jpg"),
+                //             height: 130,
+                //             width: 130,),
+                //             borderRadius: BorderRadius.all(Radius.circular(10)),
+                //           ),
+                //         ),
+                //         SizedBox(width: 20),
+                //         Expanded(
+                //           flex: 1,
+                //           child: Text(
+                //             "${drinks[index]["strDrink"]}",
+                //             style: TextStyle(
+                //               color: Colors.white70,
+                //               fontSize: 20.0,
+                //               fontWeight: FontWeight.bold,
+                //               ),
+                //               ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+            
+              )
             );
           },
-        ) : Center(child: CircularProgressIndicator(),),
+        ) : Center(child: CircularProgressIndicator(backgroundColor: blackText,),),
       ),
     );
   }
