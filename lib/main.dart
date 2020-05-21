@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ui_practice/AllIngredients.dart';
-import 'WelcomeScreen.dart';
-import 'CustomColors.dart';
+import 'package:ui_practice/Screens/AllIngredients.dart';
+import 'package:ui_practice/Screens/WelcomeScreen.dart';
+import 'package:ui_practice/HelperClass/CustomColors.dart';
 import 'package:flutter/services.dart' ;
 
 void main() => runApp(MyApp());

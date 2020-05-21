@@ -61,14 +61,6 @@ class SharedPreferenceHelper{
   }
 
   setData(var response){
-    // Map<String,dynamic> newMap = {
-    //   'url' : response['strDrinkThumb'],
-    //   'title' : response['strDrink'],
-    //   'category' : response['strCategory'],
-    //   'alcoholic' : response['strAlcoholic'],
-    //   'id' : response['idDrink'],
-    //   'response' : response,
-    //   };
     var resBody = {};
     resBody['url'] = response["strDrinkThumb"];
     resBody['title'] = response["strDrink"];

@@ -1,43 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class CustomListItem extends StatelessWidget {
   const CustomListItem({
     this.thumbnail,
-    this.title,
-    this.category,
-    this.alcoholic,
     this.onPressed,
+    this.drink,
   });
 
+  final Map drink;
   final Widget thumbnail;
-  final String title;
-  final String category;
-  final String alcoholic;
   final Function onPressed;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){onPressed();},
           child: Container(
-        decoration: BoxDecoration(
+          decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           color: Colors.white,
           boxShadow: [new BoxShadow(color: Colors.black45, blurRadius: 8.0)]
         ),
-        margin: EdgeInsets.all(5.0),
+        margin: EdgeInsets.only(top: 8.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              flex: 2,
+              flex: 4,
               child: thumbnail,
             ),
             Expanded(
-              flex: 3,
+              flex: 4,
               child: _DrinkDescription(
-                title: title,
-                category: category,
-                alcoholic: alcoholic,
+                drink: drink,
               ),
             ),
             const Icon(
@@ -54,14 +49,10 @@ class CustomListItem extends StatelessWidget {
 class _DrinkDescription extends StatelessWidget {
   const _DrinkDescription({
     Key key,
-    this.title,
-    this.category,
-    this.alcoholic,
+    this.drink,
   }) : super(key: key);
 
-  final String title;
-  final String category;
-  final String alcoholic;
+  final Map drink;
 
   @override
   Widget build(BuildContext context) {
@@ -70,18 +61,28 @@ class _DrinkDescription extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
+          AutoSizeText(
+            drink['strDrink'],
+            minFontSize: 16.0,
+            maxLines: 3,
             style: const TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 24.0,
+              fontSize: 20.0
             ),
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+          
           Text(
-            "$category | $alcoholic",
+            "${drink['strCategory']} | ${drink['strAlcoholic']}",
             style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400),
           ),
+
+          const Padding(padding: EdgeInsets.symmetric(vertical: 3.0)),
+
+          Text("Ingredients", style: TextStyle(fontWeight: FontWeight.w500, decoration: TextDecoration.underline,),),
+          
+          for(int i = 1 ; i <= 3 ; i++)
+          if(drink['strIngredient$i'] != null)
+           Text("- ${drink['strIngredient$i']}", style: TextStyle(fontSize: 12.0),),
         ],
       ),
     );
