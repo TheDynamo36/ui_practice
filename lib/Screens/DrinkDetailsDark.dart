@@ -41,9 +41,7 @@ class _DrinkDetailsDarkState extends State<DrinkDetailsDark> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
+    return SafeArea(
         child: Scaffold(
           backgroundColor: lightBackground,
           body: response == null
@@ -165,8 +163,8 @@ class _DrinkDetailsDarkState extends State<DrinkDetailsDark> {
                   ),
                 ),
         ),
-      ),
-    );
+      );
+    //);
   }
 
   void updateUI() {
