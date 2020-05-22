@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:ui_practice/HelperClass/CustomColors.dart';
 class CurvePainter extends CustomPainter{
   @override
   void paint(Canvas canvas, Size size) {
   Path path = Path();
   Paint paint = Paint();
 
-  path.lineTo(0, size.height*1.3);
-  path.quadraticBezierTo(size.width*0.5, size.height*0.60, size.width, size.height*1);
+  path.lineTo(0, size.height*1);
+  path.quadraticBezierTo(size.width*0.5, size.height*1.2, size.width, size.height*1);
   path.lineTo(size.width, 0);
   path.close();
+  // path.quadraticBezierTo(size.width*0.5, size.height*1.4, size.width, size.height*1.3);
+  // path.lineTo(size.width, size.height);
+  path.close();
 
-  paint.color = Color(0xFF5f6b89);
+  paint.color = lightBackground;//Color(0xFF5f6b89);
   canvas.drawPath(path, paint);
   
-  path = Path();
+  // path = Path();
 
-  path.lineTo(0, size.height*0.5);
-  path.quadraticBezierTo(size.width*0.5, size.height*0.30, size.width, size.height*1);
-  path.lineTo(size.width, 0);
-  path.close();
+  // path.lineTo(0, size.height*0.5);
+  // path.quadraticBezierTo(size.width*0.5, size.height*0.30, size.width, size.height*1);
+  // path.lineTo(size.width, 0);
+  // path.close();
 
  
-  paint.color = Color(0xFF414a60);
-  canvas.drawPath(path, paint);
+  // paint.color = Color(0xFF414a60);
+  // canvas.drawPath(path, paint);
 
   // path = Path();
 
@@ -62,7 +66,7 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       child: Container(
-        height: 300.0,
+        height: 330.0,
       ),
       painter: CurvePainter(),
     );
