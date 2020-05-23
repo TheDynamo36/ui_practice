@@ -213,20 +213,23 @@ class _DrinkDetailsDarkState extends State<DrinkDetailsDark> {
   }
 
   Widget _customCard(int index, var size) {
+    String qty = measurementList[index].trim();
+    String ingredient = ingredientsList[index].trim();
+    TextStyle ingredientStyle = TextStyle(fontSize: qty != "-" ? 12.0 : 16.0, color: whiteText, fontWeight: qty != "-" ? FontWeight.w400 : FontWeight.w600);
     return InkWell(
       onTap: () {
         openDetails(ingredientsList[index]);
       },
       child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5.0)],
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0xFF45536D),
-        ),
+                        decoration: BoxDecoration(
+                          boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5.0)],
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xFF45536D),
+                        ),
         margin: EdgeInsets.all(8),
         padding: EdgeInsets.all(4),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Expanded(
@@ -238,24 +241,25 @@ class _DrinkDetailsDarkState extends State<DrinkDetailsDark> {
             SizedBox(
               height: 4.0,
             ),
+            if(qty != "-")
             Text(
-              "${measurementList[index]}",
+              qty,
               maxLines: 2,
               style: TextStyle(
-                  fontSize: 16, color: whiteText, fontWeight: FontWeight.w500),
+                  fontSize: 16, color: whiteText, fontWeight: FontWeight.w600),
             ),
             Text(
-              "${ingredientsList[index]}",
+              ingredient,
               maxLines: 2,
-              style: TextStyle(
-                  fontSize: 12, color: whiteText, fontWeight: FontWeight.w400),
+              style: ingredientStyle,
             ),
           ],
         ),
       ),
     );
+    
   }
-
+  
   _image() {
     return SizedBox(
       height: MediaQuery.of(context).size.width,
