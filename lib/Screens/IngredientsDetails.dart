@@ -114,6 +114,7 @@ _summary(var ingredient) {
       ingredient["strDescription"] ?? "No Description",
       textAlign: TextAlign.justify,
       style: TextStyle(
+        fontFamily: "PTSerif",
         fontSize: 16.0,
         color: whiteText.withOpacity(0.6), //whiteText,
         height: 1.5,
