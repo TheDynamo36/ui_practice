@@ -76,13 +76,14 @@ class _DrinkDescription extends StatelessWidget {
             style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400),
           ),
 
-          const Padding(padding: EdgeInsets.symmetric(vertical: 3.0)),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
 
           Text("Ingredients", style: TextStyle(fontWeight: FontWeight.w500, decoration: TextDecoration.underline,),),
           
           for(int i = 1 ; i <= 3 ; i++)
           if(drink['strIngredient$i'] != null)
            Text("- ${drink['strIngredient$i']}", style: TextStyle(fontSize: 12.0),),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
         ],
       ),
     );

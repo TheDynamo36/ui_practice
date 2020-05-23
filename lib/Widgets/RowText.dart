@@ -28,7 +28,7 @@ class RowText extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontFamily: "Playfair",
+              fontFamily: "PTSerif",
               color: blackText,
               fontSize: 14,
               fontWeight: FontWeight.w500),),
